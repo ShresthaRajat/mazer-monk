@@ -1,0 +1,53 @@
+namespace: mazer-monk
+mazer-monk:
+  defines: runnable
+  metadata:
+    name: mazer-monk
+    description: A maze generation and solving application.
+    icon: https://emojiapi.dev/api/v1/jigsaw.svg
+  containers:
+    mazer-monk:
+      build: .
+  services:
+    http-port:
+      container: mazer-monk
+      port: 80
+      host-port: 80
+      publish: false
+      protocol: TCP
+      description: The main port for web interface and API.
+  connections:
+    mongo-connection:
+      target: mongodb/mongodb
+      service: mongodb
+  variables:
+    debug:
+      env: DEBUG
+      type: string
+      description: Controls the debug mode of the app.
+      value: 'False'
+    secret-key:
+      env: SECRET_KEY
+      type: string
+      description: Used to ensure the security of the Flask session data.
+      value: '!!!SETME!!!'
+    mongo-initdb-root-username:
+      env: MONGO_INITDB_ROOT_USERNAME
+      type: string
+      description: Username for MongoDB authentication.
+      value: '!!!SETME!!!'
+    mongo-initdb-root-password:
+      env: MONGO_INITDB_ROOT_PASSWORD
+      type: string
+      description: Password for MongoDB authentication.
+      value: '!!!SETME!!!'
+    mongo-ip:
+      env: MONGO_IP
+      type: string
+      description: The host IP address where MongoDB server is located.
+      value: <- connection-hostname("mongo-connection")
+    mongo-port:
+      env: MONGO_PORT
+      type: string
+      description: MongoDB server port
+      value: <- connection-port("mongo-connection")
