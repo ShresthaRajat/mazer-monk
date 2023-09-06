@@ -1,0 +1,58 @@
+namespace: mazer-monk
+mazer-monk:
+  defines: runnable
+  metadata:
+    name: mazer-monk
+    description: A maze generator and solver with GraphQL APIs and user authentication.
+    icon: https://emojiapi.dev/api/v1/robot.svg
+  containers:
+    mazer-monk:
+      build: .
+  services:
+    http:
+      container: mazer-monk
+      port: 80
+      host-port: 80
+      publish: false
+      protocol: TCP
+      description: Main app port
+  connections:
+    mongodb:
+      target: mongodb/mongodb
+      service: mongodb
+  variables:
+    debug:
+      env: DEBUG
+      type: string
+      description: Debug flag for the application.
+      value: '!!!SETME!!!'
+    secret-key:
+      env: SECRET_KEY
+      type: string
+      description: Secret key for signing sessions
+      value: '!!!SETME!!!'
+    mongo-initdb-root-username:
+      env: MONGO_INITDB_ROOT_USERNAME
+      type: string
+      description: Username for MongoDB connection.
+      value: '!!!SETME-USE-SECRETS!!!'
+    mongo-initdb-root-password:
+      env: MONGO_INITDB_ROOT_PASSWORD
+      type: string
+      description: Password for MongoDB connection.
+      value: '!!!SETME-USE-SECRETS!!!'
+    mongo-ip:
+      env: MONGO_IP
+      type: string
+      description: Host IP for MongoDB.
+      value: <- connection-hostname("mongodb")
+    session-type:
+      env: SESSION_TYPE
+      type: string
+      description: Session type for the application.
+      value: mongo
+    mongo-port:
+      env: MONGO_PORT
+      type: string
+      description: Port for MongoDB connection.
+      value: <- connection-port("mongodb")
