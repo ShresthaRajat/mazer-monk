@@ -1,0 +1,58 @@
+namespace: mazer-monk
+mazer-monk:
+  defines: runnable
+  metadata:
+    name: mazer-monk
+    description: A flask based web application that generates mazes.
+    icon: https://emojiapi.dev/api/v1/cyclone.svg
+  containers:
+    mazer-monk:
+      build: .
+  services:
+    http:
+      container: mazer-monk
+      port: 80
+      host-port: 80
+      publish: false
+      protocol: TCP
+      description: Port for HTTP server
+  connections:
+    mongo-db:
+      target: mongodb/mongodb
+      service: mongodb
+  variables:
+    debug:
+      env: DEBUG
+      type: string
+      description: 'Enables or disables debug mode. Default: Disabled'
+      value: 'false'
+    secret-key:
+      env: SECRET_KEY
+      type: string
+      description: A secret key that will be used for securely signing the session cookie.
+      value: '!!!SETME-USE-SECRETS!!!'
+    mongo-initdb-root-username:
+      env: MONGO_INITDB_ROOT_USERNAME
+      type: string
+      description: Username for the MongoDB root user.
+      value: '!!!SETME-USE-SECRETS!!!'
+    mongo-initdb-root-password:
+      env: MONGO_INITDB_ROOT_PASSWORD
+      type: string
+      description: Password for MongoDB root user.
+      value: '!!!SETME-USE-SECRETS!!!'
+    mongo-ip:
+      env: MONGO_IP
+      type: string
+      description: The hostname or IP address of the MongoDB instance to connect to.
+      value: <- connection-hostname("mongo-db")
+    mongo-port:
+      env: MONGO_PORT
+      type: string
+      description: Port number of the MongoDB instance.
+      value: <- connection-port("mongo-db")
+    mongo-db-name:
+      env: MONGO_DB_NAME
+      type: string
+      description: The name of the MongoDB database to connect to.
+      value: mydatabase
