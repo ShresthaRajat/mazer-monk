@@ -9,15 +9,15 @@ services:
       - SECRET_KEY=${secret-key}
       - MONGO_INITDB_ROOT_USERNAME=${mongo-initdb-root-username}
       - MONGO_INITDB_ROOT_PASSWORD=${mongo-initdb-root-password}
-      - MONGO_IP=mongodb  # Use the service name as the hostname
+      - MONGO_IP=mazer-mongodb  # Use the service name as the hostname
       - SESSION_TYPE=${session-type}
       - MONGO_PORT=${mongo-port}
     networks:
       - mazer-monk-network
     depends_on:
-      - mongodb
+      - mazer-mongodb
 
-  mongodb:
+  mazer-mongodb:
     image: mongo
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${mongo-initdb-root-username}
