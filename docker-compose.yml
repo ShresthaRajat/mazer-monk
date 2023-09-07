@@ -1,0 +1,29 @@
+version: '3'
+services:
+  mazer-monk:
+    build: .
+    ports:
+      - "82:80"
+    environment:
+      - DEBUG=${debug}
+      - SECRET_KEY=${secret-key}
+      - MONGO_INITDB_ROOT_USERNAME=${mongo-initdb-root-username}
+      - MONGO_INITDB_ROOT_PASSWORD=${mongo-initdb-root-password}
+      - MONGO_IP=mongodb  # Use the service name as the hostname
+      - SESSION_TYPE=${session-type}
+      - MONGO_PORT=${mongo-port}
+    networks:
+      - mazer-monk-network
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${mongo-initdb-root-username}
+      - MONGO_INITDB_ROOT_PASSWORD=${mongo-initdb-root-password}
+    networks:
+      - mazer-monk-network
+
+networks:
+  mazer-monk-network:
