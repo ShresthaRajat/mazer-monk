@@ -3,56 +3,58 @@ mazer-monk:
   defines: runnable
   metadata:
     name: mazer-monk
-    description: A maze generator and solver with GraphQL APIs and user authentication.
-    icon: https://emojiapi.dev/api/v1/robot.svg
+    description: >-
+      A Flask based python application that generates mazes and provide
+      functionalities like login/register and allows users to manipulate mazes.
+    icon: https://emojiapi.dev/api/v1/video_game.svg
   containers:
     mazer-monk:
       build: .
   services:
-    http:
+    flask-default:
       container: mazer-monk
       port: 80
       host-port: 80
       publish: false
       protocol: TCP
-      description: Main app port
+      description: The default port where Flask run and expose its application.
   connections:
-    mongodb:
+    mongo-connection:
       target: mongodb/mongodb
       service: mongodb
   variables:
     debug:
       env: DEBUG
       type: string
-      description: Debug flag for the application.
-      value: '!!!SETME!!!'
+      description: Specifies if the Flask should run in debug mode or not.
+      value: 'true'
     secret-key:
       env: SECRET_KEY
       type: string
-      description: Secret key for signing sessions
-      value: '!!!SETME!!!'
+      description: A secret key used for session security.
+      value: '!!!SETME-USE-SECRETS!!!'
     mongo-initdb-root-username:
       env: MONGO_INITDB_ROOT_USERNAME
       type: string
-      description: Username for MongoDB connection.
+      description: Username for mongoDB database.
       value: '!!!SETME-USE-SECRETS!!!'
     mongo-initdb-root-password:
       env: MONGO_INITDB_ROOT_PASSWORD
       type: string
-      description: Password for MongoDB connection.
+      description: Password for mongoDB database.
       value: '!!!SETME-USE-SECRETS!!!'
-    mongo-ip:
-      env: MONGO_IP
-      type: string
-      description: Host IP for MongoDB.
-      value: <- connection-hostname("mongodb")
     session-type:
       env: SESSION_TYPE
       type: string
-      description: Session type for the application.
+      description: Defines how flask services should manage user session.
       value: mongo
     mongo-port:
       env: MONGO_PORT
       type: string
-      description: Port for MongoDB connection.
-      value: <- connection-port("mongodb")
+      description: The port on which MongoDB is running.
+      value: <- connection-port("mongo-connection")
+    mongo-ip:
+      env: MONGO_IP
+      type: string
+      description: The host IP where MongoDB is running.
+      value: <- connection-hostname("mongo-connection")
